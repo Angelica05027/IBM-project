@@ -1,32 +1,63 @@
-from flask import Flask, render_template, request
+from flask import Flask
 
-app = Flask(__name__)
-# app.config.from_object(__name__)
+def create_app():
+    app = Flask(__name__)
 
-@app.route('/')
-def welcome():
-    return render_template('form.html')
+    # -------------------------
+    # 🔧 Configuration
+    # -------------------------
+    #app.config.from_object("config.Config")
 
-@app.route('/', methods=['POST'])
-def result():
-    var_1 = request.form.get("var_1", type=int, default=0)
-    var_2 = request.form.get("var_2", type=int, default=0)
-    operation = request.form.get("operation")
-    if(operation == 'Addition'):
-        result = var_1 + var_2
-    elif(operation == 'Subtraction'):
-        result = var_1 - var_2
-    elif(operation == 'Multiplication'):
-        result = var_1 * var_2
-    elif(operation == 'Division'):
-    	if(var_1==0 and var_2==0):
-    		result = 0
-    	else:
-        	result = var_1 / var_2
-    else:
-        result = 0
-    entry = result
-    return render_template('form.html', entry=entry)
+    # -------------------------
+    # 🗄️ Database setup
+    # -------------------------
+    
 
-if __name__ == '__main__':
+    # -------------------------
+    # 📦 Register Blueprints
+    # -------------------------
+    try:
+        from routes.auth import auth
+        app.register_blueprint(auth)
+    except ImportError:
+        print("auth module not found")
+
+    try:
+        from routes.admin import admin
+        app.register_blueprint(admin)
+    except ImportError:
+        print("admin module not found")
+
+    try:
+        from routes.shop import shop
+        app.register_blueprint(shop)
+    except ImportError:
+        print("shop module not found")
+
+    # -------------------------
+    # 🏠 Default route
+    # -------------------------
+    @app.route("/")
+    def home():
+        return "Flask App Running 🚀"
+
+    # -------------------------
+    # ❌ Error Handlers
+    # -------------------------
+    @app.errorhandler(404)
+    def not_found(e):
+        return "404 Not Found", 404
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return "500 Internal Server Error", 500
+
+    return app
+
+
+# -------------------------
+# ▶️ Run App
+# -------------------------
+if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)
