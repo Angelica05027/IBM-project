@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Manager Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Manager Dashboard</h1>
+    <a href="{{ url_for('create_task') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Create Task</a>
+</div>
+
+<div class="bg-white rounded shadow overflow-x-auto">
+    <table class="w-full text-left">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-3">ID</th>
+                <th class="p-3">Title</th>
+                <th class="p-3">Description</th>
+                <th class="p-3">Assigned To</th>
+                <th class="p-3">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr class="border-t">
+                <td class="p-3">{{ task['id'] }}</td>
+                <td class="p-3">{{ task['title'] }}</td>
+                <td class="p-3">{{ task['description'] or '-' }}</td>
+                <td class="p-3">{{ task['assigned_username'] or 'Unassigned' }}</td>
+                <td class="p-3">
+                    <span class="px-2 py-1 rounded text-white text-xs {% if task['status'] == 'completed' %}bg-green-600{% else %}bg-yellow-500{% endif %}">
+                        {{ task['status'] }}
+                    </span>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="p-4 text-center text-gray-600">No tasks available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

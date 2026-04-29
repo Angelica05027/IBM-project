@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Inventory{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Manage Inventory</h1>
+
+<div class="bg-white shadow rounded p-4 mb-6">
+  <h2 class="text-xl font-semibold mb-3">Add New Item</h2>
+  <form method="POST" class="grid md:grid-cols-3 gap-3 items-end">
+    <input type="hidden" name="action" value="add" />
+    <div>
+      <label class="block mb-1 font-medium">Item Name</label>
+      <input type="text" name="item_name" required class="w-full border rounded px-3 py-2" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Quantity</label>
+      <input type="number" name="quantity" min="0" required class="w-full border rounded px-3 py-2" />
+    </div>
+    <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add Item</button>
+  </form>
+</div>
+
+<div class="bg-white shadow rounded overflow-x-auto">
+  <table class="w-full text-left">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="p-3">ID</th>
+        <th class="p-3">Item Name</th>
+        <th class="p-3">Quantity</th>
+        <th class="p-3">Update</th>
+        <th class="p-3">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr class="border-t">
+        <td class="p-3">{{ item['id'] }}</td>
+        <td class="p-3">{{ item['item_name'] }}</td>
+        <td class="p-3">{{ item['quantity'] }}</td>
+        <td class="p-3">
+          <form method="POST" class="flex gap-2 items-center">
+            <input type="hidden" name="action" value="update" />
+            <input type="hidden" name="item_id" value="{{ item['id'] }}" />
+            <input type="text" name="item_name" value="{{ item['item_name'] }}" class="border rounded px-2 py-1" required />
+            <input type="number" name="quantity" min="0" value="{{ item['quantity'] }}" class="border rounded px-2 py-1 w-24" required />
+            <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Update</button>
+          </form>
+        </td>
+        <td class="p-3">
+          <form method="POST" onsubmit="return confirm('Delete this item?')">
+            <input type="hidden" name="action" value="delete" />
+            <input type="hidden" name="item_id" value="{{ item['id'] }}" />
+            <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="5" class="p-4 text-center text-gray-600">No items found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

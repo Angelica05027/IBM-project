@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-600">Users</p>
+    <p class="text-2xl font-bold">{{ user_count }}</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-600">Inventory Items</p>
+    <p class="text-2xl font-bold">{{ item_count }}</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-600">Production Entries</p>
+    <p class="text-2xl font-bold">{{ production_count }}</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-gray-600">Audit Logs</p>
+    <p class="text-2xl font-bold">{{ log_count }}</p>
+  </div>
+</div>
+
+<div class="space-x-2">
+  <a href="{{ url_for('admin_users') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Manage Users</a>
+  <a href="{{ url_for('admin_inventory') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Manage Inventory</a>
+  <a href="{{ url_for('admin_logs') }}" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">View Audit Logs</a>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Manufacturing Management{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-700 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="{{ url_for('dashboard') if g.user else url_for('login') }}" class="font-bold">Manufacturing App</a>
+      <div class="text-sm space-x-3">
+        {% if g.user %}
+          <span>{{ g.user['username'] }} ({{ g.user['role'] }})</span>
+
+          <a href="{{ url_for('inventory_list') }}" class="hover:underline">Inventory</a>
+          <a href="{{ url_for('production_logs') }}" class="hover:underline">Production Logs</a>
+
+          {% if g.user['role'] == 'staff' %}
+            <a href="{{ url_for('inventory_update') }}" class="hover:underline">Update Stock</a>
+            <a href="{{ url_for('production_entry') }}" class="hover:underline">Record Production</a>
+          {% endif %}
+
+          {% if g.user['role'] == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="hover:underline">Admin</a>
+            <a href="{{ url_for('admin_users') }}" class="hover:underline">Users</a>
+            <a href="{{ url_for('admin_inventory') }}" class="hover:underline">Manage Inventory</a>
+            <a href="{{ url_for('admin_logs') }}" class="hover:underline">Audit Logs</a>
+          {% endif %}
+
+          <a href="{{ url_for('logout') }}" class="hover:underline">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="hover:underline">Login</a>
+          <a href="{{ url_for('register') }}" class="hover:underline">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto p-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2 mb-4">
+          {% for category, message in messages %}
+            <div class="px-4 py-2 rounded text-white {% if category == 'error' %}bg-red-500{% else %}bg-green-600{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

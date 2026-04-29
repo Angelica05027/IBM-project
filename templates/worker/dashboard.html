@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Worker Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Worker Dashboard</h1>
+
+<div class="bg-white rounded shadow overflow-x-auto">
+    <table class="w-full text-left">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-3">ID</th>
+                <th class="p-3">Title</th>
+                <th class="p-3">Description</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr class="border-t">
+                <td class="p-3">{{ task['id'] }}</td>
+                <td class="p-3">{{ task['title'] }}</td>
+                <td class="p-3">{{ task['description'] or '-' }}</td>
+                <td class="p-3">
+                    <span class="px-2 py-1 rounded text-white text-xs {% if task['status'] == 'completed' %}bg-green-600{% else %}bg-yellow-500{% endif %}">
+                        {{ task['status'] }}
+                    </span>
+                </td>
+                <td class="p-3">
+                    {% if task['status'] == 'pending' %}
+                    <form method="POST" action="{{ url_for('complete_task', task_id=task['id']) }}">
+                        <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Mark Completed</button>
+                    </form>
+                    {% else %}
+                    <span class="text-gray-500">Done</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="p-4 text-center text-gray-600">No tasks assigned yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Users{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Manage Users</h1>
+
+<div class="bg-white shadow rounded overflow-x-auto">
+  <table class="w-full text-left">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="p-3">ID</th>
+        <th class="p-3">Username</th>
+        <th class="p-3">Role</th>
+        <th class="p-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr class="border-t">
+        <td class="p-3">{{ user['id'] }}</td>
+        <td class="p-3">{{ user['username'] }}</td>
+        <td class="p-3">{{ user['role'] }}</td>
+        <td class="p-3">
+          {% if user['id'] != g.user['id'] %}
+            <div class="flex gap-2">
+              {% if user['role'] != 'blocked' %}
+              <form method="POST" action="{{ url_for('admin_users') }}">
+                <input type="hidden" name="action" value="block" />
+                <input type="hidden" name="user_id" value="{{ user['id'] }}" />
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Block</button>
+              </form>
+              {% endif %}
+
+              <form method="POST" action="{{ url_for('admin_users') }}" onsubmit="return confirm('Delete this user?')">
+                <input type="hidden" name="action" value="delete" />
+                <input type="hidden" name="user_id" value="{{ user['id'] }}" />
+                <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Delete</button>
+              </form>
+            </div>
+          {% else %}
+            <span class="text-gray-500">Current Admin</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4" class="p-4 text-center text-gray-600">No users found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

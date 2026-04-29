@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Production / Audit Logs{% endblock %}
+
+{% block content %}
+{% if audit_logs is defined %}
+  <h1 class="text-2xl font-bold mb-4">Audit Logs</h1>
+  <div class="bg-white shadow rounded overflow-x-auto mb-6">
+    <table class="w-full text-left">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-3">ID</th>
+          <th class="p-3">User</th>
+          <th class="p-3">Action</th>
+          <th class="p-3">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in audit_logs %}
+        <tr class="border-t">
+          <td class="p-3">{{ log['id'] }}</td>
+          <td class="p-3">{{ log['username'] }}</td>
+          <td class="p-3">{{ log['action'] }}</td>
+          <td class="p-3">{{ log['timestamp'] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="p-4 text-center text-gray-600">No audit logs found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+
+<h1 class="text-2xl font-bold mb-4">Production Logs</h1>
+<div class="bg-white shadow rounded overflow-x-auto">
+  <table class="w-full text-left">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="p-3">ID</th>
+        <th class="p-3">Item</th>
+        <th class="p-3">Produced Count</th>
+        <th class="p-3">By User</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in records %}
+      <tr class="border-t">
+        <td class="p-3">{{ row['id'] }}</td>
+        <td class="p-3">{{ row['item_name'] }}</td>
+        <td class="p-3">{{ row['produced_count'] }}</td>
+        <td class="p-3">{{ row['username'] }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4" class="p-4 text-center text-gray-600">No production records found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

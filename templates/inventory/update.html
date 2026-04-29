@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Stock / Production{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Staff Actions</h1>
+
+<div class="grid md:grid-cols-2 gap-4">
+  <div class="bg-white shadow rounded p-4">
+    <h2 class="text-xl font-semibold mb-3">Update Stock Quantity</h2>
+    <form method="POST" action="{{ url_for('inventory_update') }}" class="space-y-3">
+      <div>
+        <label class="block mb-1 font-medium">Select Item</label>
+        <select name="item_id" required class="w-full border rounded px-3 py-2">
+          <option value="">Select item</option>
+          {% for item in items %}
+            <option value="{{ item['id'] }}" {% if selected_item_id and selected_item_id|int == item['id'] %}selected{% endif %}>
+              {{ item['item_name'] }} (Current: {{ item['quantity'] }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-medium">New Quantity</label>
+        <input type="number" name="quantity" min="0" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update Stock</button>
+    </form>
+  </div>
+
+  <div class="bg-white shadow rounded p-4">
+    <h2 class="text-xl font-semibold mb-3">Record Production</h2>
+    <form method="POST" action="{{ url_for('production_entry') }}" class="space-y-3">
+      <div>
+        <label class="block mb-1 font-medium">Select Item</label>
+        <select name="item_id" required class="w-full border rounded px-3 py-2">
+          <option value="">Select item</option>
+          {% for item in items %}
+            <option value="{{ item['id'] }}">{{ item['item_name'] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-medium">Produced Count</label>
+        <input type="number" name="produced_count" min="1" required class="w-full border rounded px-3 py-2" />
+      </div>
+
+      <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Record Production</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

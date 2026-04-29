@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}All Tasks{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">All Tasks</h1>
+
+<div class="bg-white rounded shadow overflow-x-auto">
+    <table class="w-full text-left">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-3">ID</th>
+                <th class="p-3">Title</th>
+                <th class="p-3">Description</th>
+                <th class="p-3">Assigned To</th>
+                <th class="p-3">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr class="border-t">
+                <td class="p-3">{{ task['id'] }}</td>
+                <td class="p-3">{{ task['title'] }}</td>
+                <td class="p-3">{{ task['description'] or '-' }}</td>
+                <td class="p-3">{{ task['assigned_username'] or 'Unassigned' }}</td>
+                <td class="p-3">{{ task['status'] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="p-4 text-center text-gray-600">No tasks available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
